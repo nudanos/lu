@@ -47,7 +47,9 @@ static int update_loginuid(uid_t uid)
 		goto fail;
 	}
 
-	if (strlen(str_uid) != write(fd, str_uid, strlen(str_uid))) {
+	size_t len = strlen(str_uid);
+	ssize_t n = write(fd, str_uid, len);
+	if (n < 0 || (size_t)n != len) {
 		fprintf(stderr,
 			"lu: failed to write the uid %u: %s\n",
 			uid, strerror(errno));
